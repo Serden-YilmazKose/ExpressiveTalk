@@ -10,3 +10,7 @@ FInal project for the Affective Computing course.
 
 # Research Project Plan
 The research project plan can be found here: https://www.overleaf.com/project/68cfbfa071c59ee8207d96a7
+
+# References
+- [StyleTalk](https://github.com/FuxiVirtualHuman/styletalk)
+- [EmoGen](https://github.com/sahilg06/EmoGen)
