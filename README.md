@@ -7,6 +7,7 @@ FInal project for the Affective Computing course.
 * [Corentin](https://github.com/Git-Corentin) - lipsync.py, landmarks.py
 * [Mohamed](https://github.com/mosayedAI) - emotion.py
 * [Mathis](https://github.com/Patissema) - webpage
+* Thiranja - Integration.py, writing
 
 # Research Project Plan
 The research project plan can be found here: https://www.overleaf.com/project/68cfbfa071c59ee8207d96a7
