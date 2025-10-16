@@ -1,0 +1,2 @@
+python3 inference.py --checkpoint_path "checkpoints/wav2lip_gan.pth" --face "sample_data/video.mp4" --audio "sample_data/audio.wav" --outfile "results/result.mp4" 
+
