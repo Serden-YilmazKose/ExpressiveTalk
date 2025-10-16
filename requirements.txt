@@ -273,3 +273,6 @@ wxPython==4.2.3
 yarl==1.20.1
 yt-dlp==2025.9.26
 zipp==3.21.0
+streamlit
+numpy
+moviepy==2.2.1
