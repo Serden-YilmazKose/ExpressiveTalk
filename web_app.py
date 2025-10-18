@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 from pathlib import Path
-from generate_video import generate_video  # MoviePy-based video generator -- replace with function that generates the last video
+from generate_video import generate_video  # MoviePy-based video generator
 
 # --- Configuration ---
 UPLOAD_FOLDER = "Uploaded_files"
@@ -30,6 +30,18 @@ st.header("Select an Emotion")
 options = ["Neutral", "Happy", "Sad", "Fear", "Anger", "Surprise", "Disgust"]
 selected_option = st.selectbox("Choose an emotion", options)
 
+# --- Emotion Intensity Slider ---
+st.subheader("Adjust Emotion Intensity")
+intensity_value = st.slider(
+    "Select Intensity Level",
+    min_value=0.0,
+    max_value=1.0,
+    value=0.5,
+    step=0.05,
+    help="Set how intense the selected emotion should be (0 = none, 1 = maximum)."
+)
+st.write(f"Selected intensity: **{intensity_value:.2f}**")
+
 # --- Process Button ---
 if st.button("Process and Play Video"):
     # ✅ Error Checking
@@ -52,13 +64,14 @@ if st.button("Process and Play Video"):
             f.write(audio_file.getbuffer())
         st.success(f"Audio saved to {audio_path}")
 
-        # Show selected emotion
+        # Show selected emotion and intensity
         st.write(f"Selected emotion: **{selected_option}**")
+        st.write(f"Emotion intensity: **{intensity_value:.2f}**")
 
         # --- Generate video dynamically ---
         output_file_path = Path(VIDEO_FOLDER) / "generated_video.mp4"
         with st.spinner("🎥 Generating video, please wait..."):
-            generate_video(str(output_file_path))  # Create video using MoviePy -- Replace by whatever function creates the last output video
+            generate_video(str(output_file_path))  # Replace with your actual video generation function
 
         # --- Play the generated video ---
         if output_file_path.exists():
