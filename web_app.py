@@ -55,7 +55,7 @@ st.write(f"Selected intensity: **{intensity_value:.2f}**")
 
 # --- Process Button ---
 if st.button("Process and Play Video"):
-    # ✅ Error Checking
+    # Error Checking
     if not video_file and not audio_file:
         st.error("Please upload both a video and an audio file before processing.")
     elif not video_file:
@@ -63,13 +63,13 @@ if st.button("Process and Play Video"):
     elif not audio_file:
         st.error("Please upload an audio file before processing.")
     else:
-        # ✅ Save uploaded video
+        #  Save uploaded video
         video_path = Path(UPLOAD_FOLDER) / video_file.name
         with open(video_path, "wb") as f:
             f.write(video_file.getbuffer())
         st.success(f"Video saved to {video_path}")
 
-        # ✅ Save uploaded audio
+        # Save uploaded audio
         audio_path = Path(UPLOAD_FOLDER) / audio_file.name
         with open(audio_path, "wb") as f:
             f.write(audio_file.getbuffer())
@@ -90,7 +90,7 @@ if st.button("Process and Play Video"):
             st.subheader("🎞️ Playing Generated Video")
             st.video(str(output_file_path))
 
-            # ✅ Add Download Button
+            # Add Download Button
             with open(output_file_path, "rb") as f:
                 video_bytes = f.read()
             
