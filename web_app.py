@@ -11,6 +11,17 @@ os.makedirs(VIDEO_FOLDER, exist_ok=True)
 
 st.title("🎬 ExpressiveTalk")
 
+# --- Mode Toggle Section ---
+st.header("Mode Selection")
+mode = st.radio(
+    "Choose Processing Mode",
+    options=["Emotion", "Emotion and Style"],
+    help="Select 'Emotion' to adjust emotional tone only, or 'Emotion and Style' to modify both emotion and the visual style of the output video."
+)
+
+if mode == "Emotion and Style":
+    st.info("🖌️ **Style Mode Explanation:** In this mode, both the emotional tone and the visual style (such as color, lighting, or artistic filters) are adjusted to better reflect the selected emotion.")
+
 # --- File Upload Section ---
 st.header("Upload Files")
 video_file = st.file_uploader("Upload a Video", type=["mp4", "mov", "avi"])
@@ -64,18 +75,30 @@ if st.button("Process and Play Video"):
             f.write(audio_file.getbuffer())
         st.success(f"Audio saved to {audio_path}")
 
-        # Show selected emotion and intensity
+        # Show selected emotion, intensity, and mode
         st.write(f"Selected emotion: **{selected_option}**")
         st.write(f"Emotion intensity: **{intensity_value:.2f}**")
+        st.write(f"Mode selected: **{mode}**")
 
         # --- Generate video dynamically ---
         output_file_path = Path(VIDEO_FOLDER) / "generated_video.mp4"
         with st.spinner("🎥 Generating video, please wait..."):
-            generate_video(str(output_file_path))  # Replace with your actual video generation function
+            generate_video(str(output_file_path))  # Replace with your actual video generation logic
 
-        # --- Play the generated video ---
+        # --- Play and Download the generated video ---
         if output_file_path.exists():
             st.subheader("🎞️ Playing Generated Video")
             st.video(str(output_file_path))
+
+            # ✅ Add Download Button
+            with open(output_file_path, "rb") as f:
+                video_bytes = f.read()
+            
+            st.download_button(
+                label="⬇️ Download Generated Video",
+                data=video_bytes,
+                file_name="generated_video.mp4",
+                mime="video/mp4"
+            )
         else:
             st.error("⚠️ Video generation failed.")
