@@ -1,0 +1,6 @@
+[submodule "styletalk/StyleTalk"]
+	path = styletalk/StyleTalk
+	url = https://github.com/FuxiVirtualHuman/styletalk.git
+[submodule "styletalk/Deep3DFaceRecon_pytorch"]
+	path = styletalk/Deep3DFaceRecon_pytorch
+	url = https://github.com/sicxu/Deep3DFaceRecon_pytorch.git
