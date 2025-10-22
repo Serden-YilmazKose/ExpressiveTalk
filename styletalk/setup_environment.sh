@@ -32,8 +32,15 @@ mkdir -p Deep3DFaceRecon_pytorch/checkpoints
 mkdir -p Deep3DFaceRecon_pytorch/checkpoints/epoch_20
 mkdir -p Deep3DFaceRecon_pytorch/BFM
 mkdir -p Deep3DFaceRecon_pytorch/BFM/temp
+mkdir -p styletalk/checkpoints
 
 pip install gdown
+
+echo "Downloading styletalk checkpoints..."
+gdown 1z54FymEiyPQ0mPGrVePt8GMtDe-E2RmN \
+    -O styletalk/checkpoints/styletalk_checkpoint.pth
+gdown 1wFAtFQjybKI3hwRWvtcBDl4tpZzlDkja \
+  -O styletalk/checkpoints/renderer_checkpoint.pt
 
 echo "Downloading Deep3DFaceRecon checkpoint..."
 gdown 1BlDBB4dLLrlN3cJhVL4nmrd_g6Jx6uP0 \

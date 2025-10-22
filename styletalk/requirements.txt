@@ -23,3 +23,10 @@ torchvision
 
 face_alignment
 yacs
+
+scikit-learn
+
+ninja
+
+imageio
+av
