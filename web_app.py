@@ -1,6 +1,8 @@
-import streamlit as st
 import os
 from pathlib import Path
+
+import streamlit as st
+
 from generate_video import generate_video  # MoviePy-based video generator
 
 # --- Configuration ---
@@ -16,11 +18,13 @@ st.header("Mode Selection")
 mode = st.radio(
     "Choose Processing Mode",
     options=["Emotion", "Emotion and Style"],
-    help="Select 'Emotion' to adjust emotional tone only, or 'Emotion and Style' to modify both emotion and the visual style of the output video."
+    help="Select 'Emotion' to adjust emotional tone only, or 'Emotion and Style' to modify both emotion and the visual style of the output video.",
 )
 
 if mode == "Emotion and Style":
-    st.info("🖌️ **Style Mode Explanation:** In this mode, both the emotional tone and the visual style (such as color, lighting, or artistic filters) are adjusted to better reflect the selected emotion.")
+    st.info(
+        "🖌️ **Style Mode Explanation:** In this mode, both the emotional tone and the visual style (such as color, lighting, or artistic filters) are adjusted to better reflect the selected emotion."
+    )
 
 # --- File Upload Section ---
 st.header("Upload Files")
@@ -49,7 +53,7 @@ intensity_value = st.slider(
     max_value=1.0,
     value=0.5,
     step=0.05,
-    help="Set how intense the selected emotion should be (0 = none, 1 = maximum)."
+    help="Set how intense the selected emotion should be (0 = none, 1 = maximum).",
 )
 st.write(f"Selected intensity: **{intensity_value:.2f}**")
 
@@ -83,7 +87,8 @@ if st.button("Process and Play Video"):
         # --- Generate video dynamically ---
         output_file_path = Path(VIDEO_FOLDER) / "generated_video.mp4"
         with st.spinner("🎥 Generating video, please wait..."):
-            generate_video(str(output_file_path))  # Replace with your actual video generation logic
+            # Replace with your actual video generation logic
+            generate_video(str(output_file_path))
 
         # --- Play and Download the generated video ---
         if output_file_path.exists():
@@ -93,12 +98,12 @@ if st.button("Process and Play Video"):
             # Add Download Button
             with open(output_file_path, "rb") as f:
                 video_bytes = f.read()
-            
+
             st.download_button(
                 label="⬇️ Download Generated Video",
                 data=video_bytes,
                 file_name="generated_video.mp4",
-                mime="video/mp4"
+                mime="video/mp4",
             )
         else:
             st.error("⚠️ Video generation failed.")
