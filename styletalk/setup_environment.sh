@@ -42,7 +42,7 @@ gdown 1BlDBB4dLLrlN3cJhVL4nmrd_g6Jx6uP0 \
 echo "Downloading Basel Face Model (BFM09)..."
 gdown 1bw5Xf8C12pWmcMhNEu6PtsYVZkVucEN6 \
     -O Deep3DFaceRecon_pytorch/BFM/Exp_Pca.bin
-wget --user "jnyman21@student.oulu.fi" --password "xlf6ScXc" https://faces.dmi.unibas.ch/bfm/content/basel_face_model/downloads/restricted/BaselFaceModel.tgz \
+wget --user "usr" --password "pwd" https://faces.dmi.unibas.ch/bfm/content/basel_face_model/downloads/restricted/BaselFaceModel.tgz \
     -O "Deep3DFaceRecon_pytorch/BFM/temp/BaselFaceModel.tgz"
 tar -xvzf Deep3DFaceRecon_pytorch/BFM/temp/BaselFaceModel.tgz -C Deep3DFaceRecon_pytorch/BFM/temp
 cp "Deep3DFaceRecon_pytorch/BFM/temp/PublicMM1/01_MorphableModel.mat" "Deep3DFaceRecon_pytorch/BFM"
