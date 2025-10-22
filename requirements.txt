@@ -7,7 +7,7 @@ aiosignal==1.4.0
 alabaster==1.0.0
 annotated-types==0.7.0
 anyio==4.10.0
-apparmor==4.1.2
+# apparmor==4.1.2
 appdirs==1.4.4
 application-utility==1.4.0
 argcomplete==3.6.2
@@ -139,7 +139,7 @@ nltk==3.9.1
 notebook==7.4.5
 notebook_shim==0.2.4
 npyscreen==4.10.5
-numba==0.61.0+0.g8ec16ceeb.dirty
+numba==0.61.0
 numpy==2.3.3
 openai==1.107.2
 OpenTimelineIO==0.17.0
