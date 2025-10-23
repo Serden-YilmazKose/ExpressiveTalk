@@ -8,42 +8,14 @@ import streamlit as st
 import imageio
 import imageio_ffmpeg as ffmpeg
 
-# ------------------------------
-# Google Drive Download Helper
-# ------------------------------
-def download_file_from_google_drive(file_id, destination):
-    """
-    Downloads a file from Google Drive, handling large file confirmation.
-    """
-    URL = "https://docs.google.com/uc?export=download"
-    session = requests.Session()
-    response = session.get(URL, params={"id": file_id}, stream=True)
-    token = None
-
-    for key, value in response.cookies.items():
-        if key.startswith("download_warning"):
-            token = value
-
-    if token:
-        response = session.get(URL, params={"id": file_id, "confirm": token}, stream=True)
-
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    with open(destination, "wb") as f:
-        for chunk in response.iter_content(32768):
-            f.write(chunk)
-    st.success(f"✅ Downloaded file to {destination}")
-
-# ------------------------------
 # Paths & Constants
 # ------------------------------
 BASE_DIR = Path(__file__).resolve().parent
 UPLOAD_FOLDER = BASE_DIR / "Uploaded_files"
 VIDEO_FOLDER = BASE_DIR / "Output_video"
 TEMP_FOLDER = BASE_DIR / "temp"
-CHECKPOINTS_DIR = BASE_DIR / "checkpoints"
-CHECKPOINT_PATH = CHECKPOINTS_DIR / "wav2lip_gan.pth"
+CHECKPOINT_PATH = BASE_DIR / "lipsync/checkpoint/wav2lip_gan.pth"
 INTEGRATION_SCRIPT = BASE_DIR / "integration_withWEB.py"
-GOOGLE_DRIVE_FILE_ID = "1_OvqStxNxLc7bXzlaVG5sz695p-FVfYY"  # Wav2Lip GAN checkpoint
 
 # ------------------------------
 # Ensure folders exist
@@ -51,19 +23,11 @@ GOOGLE_DRIVE_FILE_ID = "1_OvqStxNxLc7bXzlaVG5sz695p-FVfYY"  # Wav2Lip GAN checkp
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(VIDEO_FOLDER, exist_ok=True)
 os.makedirs(TEMP_FOLDER, exist_ok=True)
-os.makedirs(CHECKPOINTS_DIR, exist_ok=True)
 
 # ------------------------------
 # Ensure FFmpeg is available
 # ------------------------------
 os.environ["IMAGEIO_FFMPEG_EXE"] = ffmpeg.get_ffmpeg_exe()
-
-# ------------------------------
-# Download checkpoint if missing
-# ------------------------------
-if not CHECKPOINT_PATH.exists():
-    st.info("📥 Downloading Wav2Lip GAN checkpoint (~1.6GB)...")
-    download_file_from_google_drive(GOOGLE_DRIVE_FILE_ID, CHECKPOINT_PATH)
 
 # ------------------------------
 # Streamlit UI
