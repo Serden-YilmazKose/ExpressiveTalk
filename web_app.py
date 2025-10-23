@@ -107,8 +107,16 @@ if st.button("Process and Play Video"):
             try:
                 # generate video
 
-                #generate_video(str(output_file_path))
-                subprocess.run(["python", "integration_withWEB.py", str(video_path), str(audio_path)], check=True)
+                subprocess.run([
+                "python", "integration_withWEB.py",
+                "--checkpoint_path", "checkpoints/wav2lip_gan.pth",
+                "--face", str(video_path),
+                "--audio", str(audio_path),
+                "--outfile", str(output_file_path),
+                "--emotion", options,
+                "--emotion_strength", str(intensity_value)
+                ], check=True)
+
                 
                 st.success("✅ Video generation completed!")
                 
