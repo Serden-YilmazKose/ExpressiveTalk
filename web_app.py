@@ -4,7 +4,6 @@ import subprocess
 import sys
 
 import imageio
-imageio.plugins.ffmpeg.download()
 
 import streamlit as st
 
