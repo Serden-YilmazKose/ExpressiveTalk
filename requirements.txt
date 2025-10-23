@@ -14,7 +14,7 @@ lazy_loader==0.4
 librosa==0.11.0
 llvmlite==0.45.1
 matplotlib==3.10.7
-mediapipe==0.10.15
+mediapipe
 moviepy==1.0.3
 msgpack==1.1.2
 numpy==2.3.3
