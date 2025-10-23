@@ -1,25 +1,44 @@
-import os
+import os, subprocess
 from tools import extract_audio, extract_3dmm, extract_phonemes
+from pathlib import Path
 
-def generate_styletalk_video(style_video_path, pose_path, reference_image_path, output_path, audio_path=None):
+def generate_styletalk_video(style_video_path, ref_video_path, output_path="./output", audio_path=None):
     if not audio_path:
-        audio_path = extract_audio(style_video_path)
-    phoneme_json = extract_phonemes(audio_path)
-    style_clip_mat = extract_3dmm(style_video_path, output_path)
-    pose_mat = extract_3dmm(pose_path, output_path)
+      audio_path = extract_audio(ref_video_path)
 
-    cmd = f"""
-    python ./styletalk/inference_for_demo.py \
-    --audio_path {phoneme_json} \
-    --style_clip_path {style_clip_mat} \
-    --pose_path {pose_mat} \
-    --src_img_path {reference_image_path} \
-    --wav_path {audio_path} \
-    --output_path {output_path}
-    """
+    style_video_path = os.path.abspath(style_video_path)
+    ref_video_path =  os.path.abspath(ref_video_path)
+    audio_path = os.path.abspath(audio_path)
+    output_path = os.path.abspath(output_path)
+    
+    phoneme_json = extract_phonemes(ref_video_path, audio_path)
+    style_clip_png, style_clip_mat = extract_3dmm(style_video_path, output_path)
+    ref_png, ref_mat = extract_3dmm(ref_video_path, output_path)
 
-    os.system(cmd)
+    phoneme_json = os.path.abspath(phoneme_json)
+    style_clip_png = os.path.abspath(style_clip_png)
+    style_clip_mat = os.path.abspath(style_clip_mat)
+    ref_png = os.path.abspath(ref_png)
+    ref_mat = os.path.abspath(ref_mat)
+
+    cmd = [
+        "python", "inference_for_demo.py",
+        "--audio_path", phoneme_json,
+        "--style_clip_path", style_clip_mat,
+        "--pose_path", style_clip_mat,
+        "--src_img_path", ref_png,
+        "--wav_path", audio_path,
+        "--output_path", output_path
+    ]
+    repo_root = Path("styletalk").resolve()
+
+    subprocess.run(cmd, cwd=repo_root, check=True, text=True)
+
     return output_path
 
 if __name__ == "__main__":
-    generate_styletalk_video(style_video_path="./ref_img", pose_path="./", reference_image_path="./styletalk/samples/source_video/image/andrew_clip_1.png", output_path="./", audio_path="Obama_clip1.wav")
+    generate_styletalk_video(
+      style_video_path="./Obama_clip3.mp4", 
+      ref_video_path="./KristiNoem.mp4", 
+      audio_path="KristiNoem.wav"
+    )
