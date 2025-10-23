@@ -5,20 +5,15 @@ import sys
 
 import streamlit as st
 
-from generate_video import generate_video  # MoviePy-based video generator
-#from integration_withWEB import main_video_gen  # Fonction pour générer la vidéo
-
 # --- Configuration ---
 UPLOAD_FOLDER = "Uploaded_files"
 VIDEO_FOLDER = "Output_video"
 
 BASE_DIR = Path(__file__).resolve().parent
-integration_script = BASE_DIR / "integration_withWEB.py"
-#CHECKPOINT_PATH = "checkpoints/wav2lip_gan.pth"  # Chemin vers votre modèle Wav2Lip
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(VIDEO_FOLDER, exist_ok=True)
-os.makedirs("temp", exist_ok=True)  # Dossier temporaire pour les fichiers intermédiaires
+os.makedirs("temp", exist_ok=True)  # Temporary folder
 
 st.title("🎬 ExpressiveTalk")
 
@@ -54,7 +49,7 @@ st.header("Select an Emotion")
 options = ["Neutral", "Happy", "Sad", "Fear", "Anger", "Surprise", "Disgust"]
 selected_option = st.selectbox("Choose an emotion", options)
 
-# Mapper les émotions vers les valeurs attendues par integration_withWEB
+# Mapping emotions to integration_withWEB
 emotion_mapping = {
     "Neutral": "neutral",
     "Happy": "happy",
@@ -87,56 +82,69 @@ if st.button("Process and Play Video"):
     elif not audio_file:
         st.error("Please upload an audio file before processing.")
     else:
-        # Save uploaded video
+        # Save uploaded files
         video_path = Path(UPLOAD_FOLDER) / video_file.name
         with open(video_path, "wb") as f:
             f.write(video_file.getbuffer())
         st.success(f"Video saved to {video_path}")
 
-        # Save uploaded audio
         audio_path = Path(UPLOAD_FOLDER) / audio_file.name
         with open(audio_path, "wb") as f:
             f.write(audio_file.getbuffer())
         st.success(f"Audio saved to {audio_path}")
 
-        # Show selected emotion, intensity, and mode
+        # Show selections
         st.write(f"Selected emotion: **{selected_option}**")
         st.write(f"Emotion intensity: **{intensity_value:.2f}**")
         st.write(f"Mode selected: **{mode}**")
 
-        # --- Generate video dynamically ---
+        # --- Generate video ---
         output_file_path = Path(VIDEO_FOLDER) / "generated_video.mp4"
-        
+
         with st.spinner("🎥 Generating video, please wait..."):
             try:
-                result = subprocess.run([
-                sys.executable,
-                str(integration_script),
-                "--checkpoint_path", str(BASE_DIR / "checkpoints/wav2lip_gan.pth"),
-                "--face", str(video_path),
-                "--audio", str(audio_path),
-                "--outfile", str(output_file_path),
-                "--emotion", emotion_mapping[selected_option],
-                "--emotion_strength", str(intensity_value)
-                ],
-                capture_output=True, text=True, check=True)
+                integration_script = BASE_DIR / "integration_withWEB.py"
+
+                # Determine if emotion should be applied
+                try:
+                    import mediapipe  # check if mediapipe is available
+                    apply_emotion = True
+                except ImportError:
+                    apply_emotion = False
+                    st.warning("⚠️ Mediapipe not found. Skipping emotion transfer (lip-sync only).")
+
+                # Pass arguments
+                if apply_emotion:
+                    emotion_arg = emotion_mapping[selected_option]
+                    emotion_strength_arg = str(intensity_value)
+                else:
+                    emotion_arg = "None"
+                    emotion_strength_arg = "0"
+
+                subprocess.run([
+                    sys.executable,
+                    str(integration_script),
+                    "--checkpoint_path", str(BASE_DIR / "checkpoints/wav2lip_gan.pth"),
+                    "--face", str(video_path),
+                    "--audio", str(audio_path),
+                    "--outfile", str(output_file_path),
+                    "--emotion", emotion_arg,
+                    "--emotion_strength", emotion_strength_arg
+                ], check=True)
 
                 st.success("✅ Video generation completed!")
-                st.text(result.stdout or "No output captured from script.")
 
             except subprocess.CalledProcessError as e:
-                st.error("❌ Integration script failed:")
-                st.text("STDOUT:\n" + (e.stdout or "No stdout") + "\n\nSTDERR:\n" + (e.stderr or "No stderr"))
-            except Exception as e:
-                st.error(f"⚠️ Unexpected error: {str(e)}")
+                st.error("❌ Error during video generation.")
+                st.text(f"STDOUT:\n{e.stdout}")
+                st.text(f"STDERR:\n{e.stderr}")
+                st.exception(e)
 
-
-        # --- Play and Download the generated video ---
+        # --- Play and Download Video ---
         if output_file_path.exists():
             st.subheader("🎞️ Playing Generated Video")
             st.video(str(output_file_path))
 
-            # Add Download Button
             with open(output_file_path, "rb") as f:
                 video_bytes = f.read()
 
