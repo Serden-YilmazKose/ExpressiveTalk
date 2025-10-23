@@ -40,3 +40,4 @@ mediapipe==0.10.15
 torch==2.2.1
 torchvision==0.17.1
 torchaudio==2.2.1
+imageio[ffmpeg]==2.28.0
