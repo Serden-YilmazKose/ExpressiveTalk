@@ -15,12 +15,12 @@ checkpoints_dir.mkdir(exist_ok=True)
 checkpoint_path = checkpoints_dir / "wav2lip_gan.pth"
 
 # Google Drive file ID (replace with your file's actual ID)
-url = "https://drive.google.com/file/d/uc?id=16XV9XA_cwVhpo-QhMqpGJMRBlLPVc8gO"
+url = "https://drive.google.com/file/d/uc?id=1_OvqStxNxLc7bXzlaVG5sz695p-FVfYY"
 
 # Download the model if it does not exist
 if not checkpoint_path.exists():
     st.info("Downloading wav2lip_gan.pth model (~1.6GB)...")
-    gdown.download(url, str(checkpoint_path), quiet=False)
+    gdown.download(url, str(checkpoint_path), quiet=False, fuzzy=True)
     st.success("Model downloaded successfully!")
 
 
