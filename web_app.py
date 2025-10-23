@@ -4,14 +4,25 @@ import subprocess
 import sys
 import gdown
 
-CHECKPOINT_PATH = "checkpoints/wav2lip_gan.pth"
-URL = f"https://drive.google.com/file/d/1_OvqStxNxLc7bXzlaVG5sz695p-FVfYY/view?usp=sharing"
+BASE_DIR = Path(__file__).resolve().parent
 
-# Ensure checkpoints folder exists
-os.makedirs("checkpoints", exist_ok=True)
+# URL = f"https://drive.google.com/file/d/1_OvqStxNxLc7bXzlaVG5sz695p-FVfYY/view?usp=sharing"
+# Path to checkpoints folder
+checkpoints_dir = BASE_DIR / "checkpoints"
+checkpoints_dir.mkdir(exist_ok=True)
 
-print("Downloading Wav2Lip GAN checkpoint...")
-gdown.download(URL, CHECKPOINT_PATH, quiet=False)
+# Path to the model file
+checkpoint_path = checkpoints_dir / "wav2lip_gan.pth"
+
+# Google Drive file ID (replace with your file's actual ID)
+file_id = "1_OvqStxNxLc7bXzlaVG5sz695p-FVfYY"
+url = f"https://drive.google.com/uc?id={file_id}"
+
+# Download the model if it does not exist
+if not checkpoint_path.exists():
+    st.info("Downloading wav2lip_gan.pth model (~1.6GB)...")
+    gdown.download(url, str(checkpoint_path), quiet=False)
+    st.success("Model downloaded successfully!")
 
 
 import imageio
@@ -29,7 +40,7 @@ from generate_video import generate_video  # MoviePy-based video generator
 UPLOAD_FOLDER = "Uploaded_files"
 VIDEO_FOLDER = "Output_video"
 
-BASE_DIR = Path(__file__).resolve().parent
+
 integration_script = BASE_DIR / "integration_withWEB.py"
 #CHECKPOINT_PATH = "checkpoints/wav2lip_gan.pth"  # Chemin vers votre modèle Wav2Lip
 
