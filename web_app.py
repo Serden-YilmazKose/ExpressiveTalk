@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import subprocess
 
 import streamlit as st
 
@@ -106,7 +107,8 @@ if st.button("Process and Play Video"):
             try:
                 # generate video
 
-                generate_video(str(output_file_path))
+                #generate_video(str(output_file_path))
+                subprocess.run(["python", "integration_withWEB.py", str(video_path), str(audio_path)], check=True)
                 
                 st.success("✅ Video generation completed!")
                 
