@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent
 UPLOAD_FOLDER = BASE_DIR / "Uploaded_files"
 VIDEO_FOLDER = BASE_DIR / "Output_video"
 TEMP_FOLDER = BASE_DIR / "temp"
-CHECKPOINT_PATH = BASE_DIR / "lipsync/checkpoint/wav2lip_gan.pth"
+CHECKPOINT_PATH = BASE_DIR / "lipsync/checkpoints/wav2lip_gan.pth"
 INTEGRATION_SCRIPT = BASE_DIR / "integration_withWEB.py"
 
 # ------------------------------
