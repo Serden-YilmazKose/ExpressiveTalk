@@ -5,7 +5,7 @@ import sys
 import gdown
 
 CHECKPOINT_PATH = "checkpoints/wav2lip_gan.pth"
-URL = f"https://drive.google.com/file/d/1_OvqStxNxLc7bXzlaVG5sz695p-FVfYY/view?usp=drive_link"
+URL = f"https://drive.usercontent.google.com/download?id=1_OvqStxNxLc7bXzlaVG5sz695p-FVfYY&export=download&authuser=0"
 
 # Ensure checkpoints folder exists
 os.makedirs("checkpoints", exist_ok=True)
