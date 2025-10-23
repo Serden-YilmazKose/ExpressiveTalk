@@ -4,7 +4,7 @@ from pathlib import Path
 import streamlit as st
 
 from generate_video import generate_video  # MoviePy-based video generator
-from integration_withWEB import main_video_gen  # Fonction pour générer la vidéo
+#from integration_withWEB import main_video_gen  # Fonction pour générer la vidéo
 
 # --- Configuration ---
 UPLOAD_FOLDER = "Uploaded_files"
