@@ -2,6 +2,21 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import gdown
+
+CHECKPOINT_PATH = "checkpoints/wav2lip_gan.pth"
+URL = f"https://drive.google.com/file/d/1_OvqStxNxLc7bXzlaVG5sz695p-FVfYY/view?usp=drive_link"
+
+# Ensure checkpoints folder exists
+os.makedirs("checkpoints", exist_ok=True)
+
+# Download if missing
+if not os.path.isfile(CHECKPOINT_PATH):
+    print("Downloading Wav2Lip GAN checkpoint...")
+    gdown.download(URL, CHECKPOINT_PATH, quiet=False)
+else:
+    print("Checkpoint already exists.")
+
 
 import imageio
 import imageio_ffmpeg as ffmpeg
