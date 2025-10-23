@@ -3,6 +3,9 @@ from pathlib import Path
 import subprocess
 import sys
 
+import imageio
+imageio.plugins.ffmpeg.download()
+
 import streamlit as st
 
 from generate_video import generate_video  # MoviePy-based video generator
