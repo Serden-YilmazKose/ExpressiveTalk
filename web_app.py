@@ -108,12 +108,8 @@ if st.button("Process and Play Video"):
         
         with st.spinner("🎥 Generating video, please wait..."):
             try:
-                # generate video
-
-                integration_script = BASE_DIR / "integration_withWEB.py"
-
-                subprocess.run([
-                sys.executable,  # uses same python interpreter
+                result = subprocess.run([
+                sys.executable,
                 str(integration_script),
                 "--checkpoint_path", str(BASE_DIR / "checkpoints/wav2lip_gan.pth"),
                 "--face", str(video_path),
@@ -121,15 +117,18 @@ if st.button("Process and Play Video"):
                 "--outfile", str(output_file_path),
                 "--emotion", emotion_mapping[selected_option],
                 "--emotion_strength", str(intensity_value)
-                ], capture_output=True, text=True, check=True)
-
-                
+                ],
+                capture_output=True, text=True, check=True)
 
                 st.success("✅ Video generation completed!")
-                
+                st.text(result.stdout or "No output captured from script.")
+
+            except subprocess.CalledProcessError as e:
+                st.error("❌ Integration script failed:")
+                st.text("STDOUT:\n" + (e.stdout or "No stdout") + "\n\nSTDERR:\n" + (e.stderr or "No stderr"))
             except Exception as e:
-                st.error(f"❌ Error during video generation: {str(e)}")
-                st.exception(e)
+                st.error(f"⚠️ Unexpected error: {str(e)}")
+
 
         # --- Play and Download the generated video ---
         if output_file_path.exists():
