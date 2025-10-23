@@ -4,6 +4,10 @@ import subprocess
 import sys
 
 import imageio
+import imageio_ffmpeg as ffmpeg
+
+# Ensure FFmpeg is available for librosa / moviepy
+os.environ["IMAGEIO_FFMPEG_EXE"] = ffmpeg.get_ffmpeg_exe()
 
 import streamlit as st
 
