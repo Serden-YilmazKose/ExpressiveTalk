@@ -726,7 +726,7 @@ def main():
         resize_factor=args.resize_factor,
         crop=tuple(args.crop),
         box=tuple(args.box),
-        nosmooth=args.nosmooth,
+        nosmooth=args.nosmooth,  
     )
     print(f'Lip‑synchronised video saved to {args.outfile}')
 

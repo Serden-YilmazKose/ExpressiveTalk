@@ -4,8 +4,7 @@ from pathlib import Path
 import streamlit as st
 
 from generate_video import generate_video  # MoviePy-based video generator
-from integration_withWEB import main_video_gen
-
+from integration_withWEB import main as generate
 # --- Configuration ---
 UPLOAD_FOLDER = "Uploaded_files"
 VIDEO_FOLDER = "Output_video"
@@ -90,14 +89,7 @@ if st.button("Process and Play Video"):
         with st.spinner("🎥 Generating video, please wait..."):
             # Replace with your actual video generation logic
             # generate_video(str(output_file_path))
-            main_video_gen(
-            checkpoint_path="checkpoints/wav2lip_gan.pth",
-            face=str(video_path),
-            audio=str(audio_path),
-            outfile=str(output_file_path),
-            emotion=selected_option.lower(),
-            emotion_strength=float(intensity_value)
-            )
+            generate()
 
         # --- Play and Download the generated video ---
         if output_file_path.exists():
