@@ -4,12 +4,16 @@ from pathlib import Path
 import streamlit as st
 
 from generate_video import generate_video  # MoviePy-based video generator
+#from integration_withWEB import main_video_gen  # Fonction pour générer la vidéo
 
 # --- Configuration ---
 UPLOAD_FOLDER = "Uploaded_files"
 VIDEO_FOLDER = "Output_video"
+#CHECKPOINT_PATH = "checkpoints/wav2lip_gan.pth"  # Chemin vers votre modèle Wav2Lip
+
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(VIDEO_FOLDER, exist_ok=True)
+os.makedirs("temp", exist_ok=True)  # Dossier temporaire pour les fichiers intermédiaires
 
 st.title("🎬 ExpressiveTalk")
 
@@ -45,6 +49,17 @@ st.header("Select an Emotion")
 options = ["Neutral", "Happy", "Sad", "Fear", "Anger", "Surprise", "Disgust"]
 selected_option = st.selectbox("Choose an emotion", options)
 
+# Mapper les émotions vers les valeurs attendues par integration_withWEB
+emotion_mapping = {
+    "Neutral": "neutral",
+    "Happy": "happy",
+    "Sad": "sad",
+    "Fear": "fearful",
+    "Anger": "angry",
+    "Surprise": "surprised",
+    "Disgust": "disgusted"
+}
+
 # --- Emotion Intensity Slider ---
 st.subheader("Adjust Emotion Intensity")
 intensity_value = st.slider(
@@ -52,7 +67,7 @@ intensity_value = st.slider(
     min_value=0.0,
     max_value=1.0,
     value=0.5,
-    step=0.05,
+    step=0.01,
     help="Set how intense the selected emotion should be (0 = none, 1 = maximum).",
 )
 st.write(f"Selected intensity: **{intensity_value:.2f}**")
@@ -67,7 +82,7 @@ if st.button("Process and Play Video"):
     elif not audio_file:
         st.error("Please upload an audio file before processing.")
     else:
-        #  Save uploaded video
+        # Save uploaded video
         video_path = Path(UPLOAD_FOLDER) / video_file.name
         with open(video_path, "wb") as f:
             f.write(video_file.getbuffer())
@@ -86,9 +101,18 @@ if st.button("Process and Play Video"):
 
         # --- Generate video dynamically ---
         output_file_path = Path(VIDEO_FOLDER) / "generated_video.mp4"
+        
         with st.spinner("🎥 Generating video, please wait..."):
-            # Replace with your actual video generation logic
-            generate_video(str(output_file_path))
+            try:
+                # generate video
+
+                generate_video(str(output_file_path))
+                
+                st.success("✅ Video generation completed!")
+                
+            except Exception as e:
+                st.error(f"❌ Error during video generation: {str(e)}")
+                st.exception(e)
 
         # --- Play and Download the generated video ---
         if output_file_path.exists():

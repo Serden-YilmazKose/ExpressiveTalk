@@ -34,7 +34,14 @@ def generate_styletalk_video(style_video_path, ref_video_path, output_path="./ou
 
     subprocess.run(cmd, cwd=repo_root, check=True, text=True)
 
-    return output_path
+    cap = cv2.VideoCapture(output_path)
+    frames = []
+    ok, f = cap.read()
+    while ok:
+        frames.append(f)
+        ok, f = cap.read()
+    cap.release()
+    return frames
 
 if __name__ == "__main__":
     generate_styletalk_video(

@@ -636,6 +636,36 @@ def run_wav2lip(
     subprocess.call(command, shell=(os.name != 'nt'))
 
 
+#trying stuff for web
+#--------------------------
+
+def main_video_gen(checkpoint_path, face, audio, outfile, emotion=None, emotion_strength=1.0, emotion_fps=None):
+    # Same logic, just replace args.something with parameters directly
+    temp_emotion_video = face
+
+    if emotion and emotion_strength > 0.0:
+        temp_emotion_video = 'temp/emotion_processed.mp4'
+        os.makedirs('temp', exist_ok=True)
+        print(f'Applying emotion "{emotion}" at strength {emotion_strength}...')
+        apply_emotion_to_video(
+            input_path=face,
+            output_path=temp_emotion_video,
+            emotion=emotion,
+            strength=emotion_strength,
+            fps=emotion_fps,
+        )
+        print('Emotion transfer complete.')
+
+    run_wav2lip(
+        checkpoint_path=checkpoint_path,
+        face_path=temp_emotion_video,
+        audio_path=audio,
+        outfile=outfile,
+    )
+    print(f'Lip-synchronised video saved to {outfile}')
+
+#--------------------------
+
 def main():
     parser = argparse.ArgumentParser(
         description='Run emotion transfer and Wav2Lip inference from a single script.'
@@ -696,7 +726,7 @@ def main():
         resize_factor=args.resize_factor,
         crop=tuple(args.crop),
         box=tuple(args.box),
-        nosmooth=args.nosmooth,
+        nosmooth=args.nosmooth,  
     )
     print(f'Lip‑synchronised video saved to {args.outfile}')
 
