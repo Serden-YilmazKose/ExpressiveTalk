@@ -10,12 +10,8 @@ URL = f"https://drive.google.com/file/d/1_OvqStxNxLc7bXzlaVG5sz695p-FVfYY/view?u
 # Ensure checkpoints folder exists
 os.makedirs("checkpoints", exist_ok=True)
 
-# Download if missing
-if not os.path.isfile(CHECKPOINT_PATH):
-    print("Downloading Wav2Lip GAN checkpoint...")
-    gdown.download(URL, CHECKPOINT_PATH, quiet=False)
-else:
-    print("Checkpoint already exists.")
+print("Downloading Wav2Lip GAN checkpoint...")
+gdown.download(URL, CHECKPOINT_PATH, quiet=False)
 
 
 import imageio
