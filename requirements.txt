@@ -38,5 +38,5 @@ urllib3==2.0.4
 opencv-python-headless==4.8.1.78
 mediapipe==0.10.15
 torch==2.1.0
-torchvision==0.3.0
+torchvision==0.17.1
 torchaudio==2.2.1
