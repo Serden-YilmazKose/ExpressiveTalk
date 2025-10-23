@@ -119,7 +119,7 @@ if st.button("Process and Play Video"):
                 "--face", str(video_path),
                 "--audio", str(audio_path),
                 "--outfile", str(output_file_path),
-                "--emotion", selected_emotion,
+                "--emotion", options,
                 "--emotion_strength", str(intensity_value)
                 ], check=True)
 
