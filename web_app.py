@@ -104,18 +104,9 @@ if st.button("Process and Play Video"):
         
         with st.spinner("🎥 Generating video, please wait..."):
             try:
-                # Appeler la fonction main_video_gen
-                emotion_to_use = emotion_mapping[selected_option] if intensity_value > 0 else None
-                
-                main_video_gen(
-                    checkpoint_path=CHECKPOINT_PATH,
-                    face=str(video_path),
-                    audio=str(audio_path),
-                    outfile=str(output_file_path),
-                    emotion=emotion_to_use,
-                    emotion_strength=intensity_value,
-                    emotion_fps=None  # ou spécifier un FPS si nécessaire
-                )
+                # generate video
+
+                generate_video(str(output_file_path))
                 
                 st.success("✅ Video generation completed!")
                 
