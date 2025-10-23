@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import subprocess
+import sys
 
 import streamlit as st
 
@@ -10,6 +11,8 @@ from generate_video import generate_video  # MoviePy-based video generator
 # --- Configuration ---
 UPLOAD_FOLDER = "Uploaded_files"
 VIDEO_FOLDER = "Output_video"
+
+BASE_DIR = Path(__file__).resolve().parent
 #CHECKPOINT_PATH = "checkpoints/wav2lip_gan.pth"  # Chemin vers votre modèle Wav2Lip
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -107,13 +110,16 @@ if st.button("Process and Play Video"):
             try:
                 # generate video
 
+                integration_script = BASE_DIR / "integration_withWEB.py"
+
                 subprocess.run([
-                "python", "integration_withWEB.py",
-                "--checkpoint_path", "checkpoints/wav2lip_gan.pth",
+                sys.executable,  # uses same python interpreter
+                str(integration_script),
+                "--checkpoint_path", str(BASE_DIR / "checkpoints/wav2lip_gan.pth"),
                 "--face", str(video_path),
                 "--audio", str(audio_path),
                 "--outfile", str(output_file_path),
-                "--emotion", options,
+                "--emotion", selected_emotion,
                 "--emotion_strength", str(intensity_value)
                 ], check=True)
 
