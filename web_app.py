@@ -46,7 +46,7 @@ if mode == "Emotion and Style":
 
 # --- File upload ---
 st.header("Upload Files")
-video_file = st.file_uploader("Upload a Video", type=["mp4", "mov", "avi"])
+video_file = st.file_uploader("Upload a Video", type=["mp4", "mov", "avi", "jpeg", "pnj", "jpg"])
 audio_file = st.file_uploader("Upload an Audio", type=["mp3", "wav", "ogg"])
 
 if video_file:
