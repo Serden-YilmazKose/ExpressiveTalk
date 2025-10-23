@@ -121,9 +121,10 @@ if st.button("Process and Play Video"):
                 "--outfile", str(output_file_path),
                 "--emotion", emotion_mapping[selected_option],
                 "--emotion_strength", str(intensity_value)
-                ], check=True)
+                ], capture_output=True, text=True, check=True)
 
                 
+
                 st.success("✅ Video generation completed!")
                 
             except Exception as e:
