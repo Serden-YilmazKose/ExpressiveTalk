@@ -13,6 +13,7 @@ UPLOAD_FOLDER = "Uploaded_files"
 VIDEO_FOLDER = "Output_video"
 
 BASE_DIR = Path(__file__).resolve().parent
+integration_script = BASE_DIR / "integration_withWEB.py"
 #CHECKPOINT_PATH = "checkpoints/wav2lip_gan.pth"  # Chemin vers votre modèle Wav2Lip
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
