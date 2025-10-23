@@ -9,7 +9,7 @@ from generate_video import generate_video  # MoviePy-based video generator
 # --- Configuration ---
 UPLOAD_FOLDER = "Uploaded_files"
 VIDEO_FOLDER = "Output_video"
-CHECKPOINT_PATH = "checkpoints/wav2lip_gan.pth"  # Chemin vers votre modèle Wav2Lip
+#CHECKPOINT_PATH = "checkpoints/wav2lip_gan.pth"  # Chemin vers votre modèle Wav2Lip
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(VIDEO_FOLDER, exist_ok=True)
@@ -67,7 +67,7 @@ intensity_value = st.slider(
     min_value=0.0,
     max_value=1.0,
     value=0.5,
-    step=0.05,
+    step=0.01,
     help="Set how intense the selected emotion should be (0 = none, 1 = maximum).",
 )
 st.write(f"Selected intensity: **{intensity_value:.2f}**")
