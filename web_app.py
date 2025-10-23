@@ -15,8 +15,7 @@ checkpoints_dir.mkdir(exist_ok=True)
 checkpoint_path = checkpoints_dir / "wav2lip_gan.pth"
 
 # Google Drive file ID (replace with your file's actual ID)
-file_id = "1_OvqStxNxLc7bXzlaVG5sz695p-FVfYY"
-url = f"https://drive.google.com/uc?id={file_id}"
+url = "https://drive.google.com/uc?id=1_OvqStxNxLc7bXzlaVG5sz695p-FVfYY"
 
 # Download the model if it does not exist
 if not checkpoint_path.exists():
