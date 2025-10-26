@@ -3,11 +3,11 @@ from pathlib import Path
 import subprocess
 import sys
 import requests
-
 import streamlit as st
 import imageio
 import imageio_ffmpeg as ffmpeg
 
+# ------------------------------
 # Paths & Constants
 # ------------------------------
 BASE_DIR = Path(__file__).resolve().parent
@@ -46,12 +46,30 @@ if mode == "Emotion and Style":
 
 # --- File upload ---
 st.header("Upload Files")
-video_file = st.file_uploader("Upload a Video", type=["mp4", "mov", "avi", "jpeg", "pnj", "jpg"])
+video_file = st.file_uploader("Upload a Video or Image", type=["mp4", "mov", "avi", "jpeg", "png", "jpg"])
 audio_file = st.file_uploader("Upload an Audio", type=["mp3", "wav", "ogg"])
 
+# --- Style reference upload (only for 'Emotion and Style') ---
+style_file = None
+if mode == "Emotion and Style":
+    st.subheader("🎨 Upload a Style Reference Video or Image")
+    style_file = st.file_uploader("Upload Style Reference", type=["mp4", "mov", "avi", "jpeg", "png", "jpg"])
+
+# --- Preview uploaded files ---
 if video_file:
-    st.subheader("Preview Video")
-    st.video(video_file)
+    st.subheader("Preview Input (Video/Image)")
+    if video_file.type.startswith("video"):
+        st.video(video_file)
+    else:
+        st.image(video_file)
+
+if style_file:
+    st.subheader("Preview Style Reference")
+    if style_file.type.startswith("video"):
+        st.video(style_file)
+    else:
+        st.image(style_file)
+
 if audio_file:
     st.subheader("Preview Audio")
     st.audio(audio_file)
@@ -79,7 +97,9 @@ st.write(f"Selected intensity: **{intensity_value:.2f}**")
 # --- Process button ---
 if st.button("Process and Play Video"):
     if not video_file or not audio_file:
-        st.error("Please upload both video and audio files before processing.")
+        st.error("Please upload both a video/image and an audio file before processing.")
+    elif mode == "Emotion and Style" and not style_file:
+        st.error("Please upload a style reference when using Emotion and Style mode.")
     else:
         # Save uploaded files
         video_path = UPLOAD_FOLDER / video_file.name
@@ -89,14 +109,22 @@ if st.button("Process and Play Video"):
         with open(audio_path, "wb") as f:
             f.write(audio_file.getbuffer())
 
-        st.success(f"Saved video to {video_path}")
+        st.success(f"Saved video/image to {video_path}")
         st.success(f"Saved audio to {audio_path}")
+
+        style_path = None
+        if style_file:
+            style_path = UPLOAD_FOLDER / style_file.name
+            with open(style_path, "wb") as f:
+                f.write(style_file.getbuffer())
+            st.success(f"Saved style reference to {style_path}")
 
         output_file_path = VIDEO_FOLDER / "generated_video.mp4"
 
+        # Run subprocess
         with st.spinner("🎥 Generating video, please wait..."):
             try:
-                result = subprocess.run([
+                command = [
                     sys.executable,
                     str(INTEGRATION_SCRIPT),
                     "--checkpoint_path", str(CHECKPOINT_PATH),
@@ -105,7 +133,15 @@ if st.button("Process and Play Video"):
                     "--outfile", str(output_file_path),
                     "--emotion", emotion_mapping[selected_emotion],
                     "--emotion_strength", str(intensity_value)
-                ], capture_output=True, text=True, check=True)
+                ]
+
+                # Add style reference argument only if available
+                if style_path:
+                    command.extend(["--style_ref", str(style_path)])
+
+                result = subprocess.run(
+                    command, capture_output=True, text=True, check=True
+                )
 
                 st.success("✅ Video generation completed!")
                 st.text(result.stdout or "No output captured from script.")
