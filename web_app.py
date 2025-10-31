@@ -92,7 +92,6 @@ emotion_mapping = {
 # --- Emotion intensity ---
 st.subheader("Adjust Emotion Intensity")
 intensity_value = st.slider("Select Intensity Level", 0.0, 1.0, 0.5, 0.01)
-st.write(f"Selected intensity: **{intensity_value:.2f}**")
 
 # --- Process button ---
 if st.button("Process and Play Video"):
